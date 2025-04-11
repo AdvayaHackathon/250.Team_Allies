@@ -41,11 +41,14 @@
 }
 
 .logo-circle {
-    width: 32px;
+    width: 42px;
     height: 32px;
     background-color: #3186ff;
-    border-radius: 50%;
+    background-image: url('frontend/public/Screenshot 2025-04-11 172528.png'); /* Replace 'your-image-url.jpg' with the path to your image */
+    background-size: cover; /* Ensures the image covers the entire circle */
+    background-position: right 0px ; /* Centers the image */
 }
+
 
 .app-name {
     font-weight: 600;
