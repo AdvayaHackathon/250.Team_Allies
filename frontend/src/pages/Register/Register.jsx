@@ -105,7 +105,7 @@ const Register = () => {
                     <div className="image-overlay"></div>
                     <div className="brand-logo">
                         <div className="brand-logo-circle"></div>
-                        Anywhere app.
+                        HEALTH RISK ASSESMENT
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <footer className="footer">
             <div className="footer-content">
-                <p>&copy; 2024 Health Risk Assessment. All rights reserved.</p>
+                <p>&copy; 2025 Health Risk Assessment. All rights reserved.</p>
                 <div className="footer-links">
                     <a href="/privacy">Privacy Policy</a>
                     <a href="/terms">Terms of Service</a>
