@@ -19,7 +19,7 @@ Welcome to the Hackathon! We're excited to have you on board and can't wait to s
 
 ## Problem Statement
 
-> **In today’s fast-paced world, early detection of chronic health risks is often neglected due to limit...**
+> **Millions remain unaware of early signs of chronic diseases like diabetes, heart issues, and hypertension due to lack of accessible, data-driven risk assessment. This leads to late diagnosis and higher health risks**
 
 ---
 

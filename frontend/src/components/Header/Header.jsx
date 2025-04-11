@@ -13,6 +13,7 @@ const Header = () => {
         navigate('/login');
     };
 
+    // Function to check if link is active
     const isActive = (path) => {
         return location.pathname === path;
     };
