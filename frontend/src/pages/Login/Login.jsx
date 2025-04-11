@@ -57,14 +57,14 @@ const Login = () => {
                             <span className="app-name">Health Risk Assesment</span>
                         </div>
                         <nav className="login-nav">
-                            <Link to="/home" className="nav-link">Home</Link>
+                            <Link to="/" className="nav-link">Home</Link>
                         </nav>
                     </div>
 
                     <div className="login-form-container">
                         <h2>Login to your account</h2>
                         <p className="login-subtitle">
-                            New to Anywhere? <Link to="/register" className="accent-link">Create Account</Link>
+                            New to Here? <Link to="/register" className="accent-link">Create Account</Link>
                         </p>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -127,9 +127,7 @@ const Login = () => {
                                     />
                                     <label htmlFor="rememberMe">Remember me</label>
                                 </div>
-                                <Link to="/forgot-password" className="forgot-link">Forgot Password?</Link>
                             </div>
-
                             <button
                                 type="submit"
                                 className="login-button"

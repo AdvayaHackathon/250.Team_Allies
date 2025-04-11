@@ -9,91 +9,66 @@ const HealthForm = () => {
     const [formData, setFormData] = useState({
         age: '',
         sex: '',
-        height: '', 
+        height: '',
         weight: '',
-        yearsOfSmoking: '',
-        averagePacksPerDay: '',
-        smoking: false,
-        diabetesFamilyHistory: false,
-        environmentalExposure: 'low',
-        coughingFrequency: 'rare',
         ethnicity: '',
         geographicRegion: '',
-        physicalActivityLevel: '',
-        activityIntensity: '',
-        occupationType: '',
-        smokingStatus: '',
-        alcoholConsumption: '',
-        sleepDuration: '',
-        sleepQuality: '',
-        stressLevels: '',
-        waterIntake: '',
-        fruitVegetableConsumption: '',
-        processedFoodConsumption: '',
-        sugarIntake: '',
-        saltIntake: '',
-        redMeatConsumption: '',
-        familyHistoryCardiovascular: '',
-        familyHistoryKidneyStones: '',
-        previousKidneyStones: '',
-        historyGestationalDiabetes: '',
-        frequentUrination: '',
-        unexplainedThirst: '',
-        unexplainedWeightLoss: '',
-        chestPainDiscomfort: '',
-        shortnessOfBreath: '',
-        fatigue: '',
-        backFlankPain: '',
-        painfulUrination: '',
-        bloodInUrine: ''
+        physicalActivityLevel: 'none',
+        activityIntensity: 'light',
+        occupationType: 'sedentary',
+        smokingStatus: 'never',
+        yearsOfSmoking: '',
+        packsPerDay: '',
+        alcoholConsumption: 'none',
+        sleepDuration: '7-8',
+        sleepQuality: 'good',
+        stressLevels: 'moderate',
+        waterIntake: '4-6',
+        fruitVegetableConsumption: '1-2',
+        processedFoodConsumption: 'sometimes',
+        addedSugarIntake: 'moderate',
+        saltIntake: 'moderate',
+        redMeatConsumption: 'moderate',
+        familyHistoryCardiovascular: 'no',
+        familyHistoryDiabetes: 'no',
+        familyHistoryKidneyStones: 'no',
+        previousKidneyStones: 'no',
+        gestationalDiabetes: 'not_applicable',
+        frequentUrination: 'no',
+        unexplainedThirst: 'no',
+        unexplainedWeightLoss: 'no',
+        chestPain: 'never',
+        shortnessOfBreath: 'never',
+        fatigue: 'never',
+        backFlankPain: 'never',
+        painfulUrination: 'never',
+        bloodInUrine: 'never',
+        
+        // Environmental Factors
+        environmentalExposure: 'low'
     });
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [results, setResults] = useState(null);
-
-    // Options for dropdown fields
-    const options = {
-        'Sex': ['Male', 'Female', 'Other'],
-        'Ethnicity': ['African/Black', 'Asian', 'Caucasian/White', 'Hispanic/Latino', 'Middle Eastern', 'Pacific Islander', 'Indigenous/Native', 'Mixed', 'Other'],
-        'GeographicRegion': ['Urban', 'Suburban', 'Rural'],
-        'PhysicalActivityLevel': ['None', 'Low', 'Moderate', 'High'],
-        'ActivityIntensity': ['Light', 'Moderate', 'Vigorous'],
-        'OccupationType': ['Sedentary', 'Moderately active', 'Physically demanding', 'Retired', 'Student', 'Unemployed'],
-        'SmokingStatus': ['Never smoked', 'Former smoker (quit >1 year ago)', 'Former smoker (quit <1 year ago)', 'Current smoker (occasional)', 'Current smoker (daily)'],
-        'AlcoholConsumption': ['None', 'Occasional', 'Moderate', 'Heavy'],
-        'SleepDuration': ['<5 hours', '5-6 hours', '7-8 hours', '9+ hours'],
-        'SleepQuality': ['Poor', 'Fair', 'Good', 'Excellent'],
-        'StressLevels': ['Low', 'Moderate', 'High', 'Severe'],
-        'WaterIntake': ['<4 glasses', '4-6 glasses', '7-8 glasses', '9+ glasses'],
-        'FruitVegetableConsumption': ['<1 serving/day', '1-2 servings/day', '3-4 servings/day', '5+ servings/day'],
-        'ProcessedFoodConsumption': ['Rarely', 'Sometimes', 'Often', 'Very often'],
-        'SugarIntake': ['Low', 'Moderate', 'High'],
-        'SaltIntake': ['Low', 'Moderate', 'High'],
-        'RedMeatConsumption': ['None', 'Low', 'Moderate', 'High'],
-        'FamilyHistoryCardiovascular': ['No', 'Yes, extended family', 'Yes, immediate family', 'Unknown'],
-        'FamilyHistoryDiabetes': ['No', 'Yes, extended family', 'Yes, immediate family', 'Unknown'],
-        'FamilyHistoryKidneyStones': ['No', 'Yes, extended family', 'Yes, immediate family', 'Unknown'],
-        'PreviousKidneyStones': ['No', 'Yes, one occurrence', 'Yes, multiple occurrences'],
-        'HistoryGestationalDiabetes': ['Not applicable', 'No', 'Yes', 'Unknown'],
-        'FrequentUrination': ['No', 'Occasionally', 'Frequently', 'Very frequently'],
-        'UnexplainedThirst': ['No', 'Occasionally', 'Frequently', 'Very frequently'],
-        'UnexplainedWeightLoss': ['No', 'Yes (slight)', 'Yes (significant)'],
-        'ChestPainDiscomfort': ['Never', 'Rarely', 'Occasionally', 'Frequently'],
-        'ShortnessOfBreath': ['Never', 'Rarely', 'Occasionally', 'Frequently'],
-        'Fatigue': ['Never', 'Rarely', 'Occasionally', 'Frequently'],
-        'BackFlankPain': ['Never', 'Rarely', 'Occasionally', 'Frequently'],
-        'PainfulUrination': ['Never', 'Rarely', 'Occasionally', 'Frequently'],
-        'BloodInUrine': ['Never', 'Rarely', 'Occasionally', 'Frequently'],
-        'EnvironmentalExposure': ['Low', 'Moderate', 'High', 'Unknown'],
-        'CoughingFrequency': ['Rare', 'Occasional', 'Frequent']
-    };
+    const [showSmokingFields, setShowSmokingFields] = useState(false);
 
     const handleChange = (e) => {
-        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        const { name, value, type, checked } = e.target;
+        const newValue = type === 'checkbox' ? checked : value;
+        
         setFormData(prev => ({
             ...prev,
-            [e.target.name]: value
+            [name]: newValue
         }));
+        
+        if (name === 'smokingStatus') {
+            setShowSmokingFields(
+                value === 'former_over_year' || 
+                value === 'former_under_year' || 
+                value === 'current_occasional' || 
+                value === 'current_daily'
+            );
+        }
+        
         if (error) setError('');
     };
 
@@ -103,6 +78,7 @@ const HealthForm = () => {
             sex: 'Sex',
             height: 'Height',
             weight: 'Weight',
+            ethnicity: 'Ethnicity'
         };
 
         const missingFields = Object.entries(requiredFields)
@@ -116,14 +92,21 @@ const HealthForm = () => {
 
         const numericValidation = {
             age: { min: 0, max: 120, label: 'Age' },
-            height: { min: 50, max: 250, label: 'Height' },
-            weight: { min: 20, max: 250, label: 'Weight' },
+            height: { min: 50, max: 250, label: 'Height (cm)' },
+            weight: { min: 20, max: 500, label: 'Weight (kg)' }
         };
 
         for (const [field, rules] of Object.entries(numericValidation)) {
             const value = Number(formData[field]);
-            if (value < rules.min || value > rules.max) {
+            if (isNaN(value) || value < rules.min || value > rules.max) {
                 setError(`${rules.label} must be between ${rules.min} and ${rules.max}`);
+                return false;
+            }
+        }
+
+        if (showSmokingFields) {
+            if (!formData.yearsOfSmoking || !formData.packsPerDay) {
+                setError('Please complete all smoking-related fields');
                 return false;
             }
         }
@@ -147,12 +130,18 @@ const HealthForm = () => {
                 age: Number(formData.age),
                 height: Number(formData.height),
                 weight: Number(formData.weight),
-                yearsOfSmoking: Number(formData.yearsOfSmoking || 0),
-                averagePacksPerDay: Number(formData.averagePacksPerDay || 0),
+                yearsOfSmoking: formData.yearsOfSmoking ? Number(formData.yearsOfSmoking) : null
             };
 
             const response = await api.submitHealthData(modelData);
-            setResults(response.data.results);
+
+            navigate('/risk-assessment', {
+                state: {
+                    assessmentData: {
+                        riskAssessment: response.prediction
+                    }
+                }
+            });
         } catch (error) {
             setError(error.message || 'An error occurred while submitting the form. Please try again.');
             console.error('Form submission error:', error);
@@ -160,104 +149,10 @@ const HealthForm = () => {
             setIsSubmitting(false);
         }
     };
-    const renderField = (field, label, type = 'text') => {
-        if (type === 'number') {
-            return (
-                <div className="form-group">
-                    <label htmlFor={field}>{label}*</label>
-                    <input
-                        type="number"
-                        id={field}
-                        name={field}
-                        value={formData[field]}
-                        onChange={handleChange}
-                        className="form-input"
-                        required
-                    />
-                </div>
-            );
-        } else if (type === 'select' && options[label]) {
-            return (
-                <div className="form-group">
-                    <label htmlFor={field}>{label}</label>
-                    <select
-                        id={field}
-                        name={field}
-                        value={formData[field]}
-                        onChange={handleChange}
-                        className="form-select"
-                    >
-                        <option value="">Select an option</option>
-                        {options[label].map(option => (
-                            <option key={option} value={option}>{option}</option>
-                        ))}
-                    </select>
-                </div>
-            );
-        } else if (type === 'checkbox') {
-            return (
-                <div className="form-group checkbox-group">
-                    <label className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
-                            name={field}
-                            checked={formData[field]}
-                            onChange={handleChange}
-                            className="form-checkbox"
-                        />
-                        <span>{label}</span>
-                    </label>
-                </div>
-            );
-        }
-    };
-
-    const renderResults = () => {
-        if (!results) return null;
-        
-        return (
-            <div className="mt-8 p-6 bg-white rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4">Risk Assessment Results</h2>
-                
-                {Object.entries(results).map(([disease, data]) => (
-                    <div key={disease} className="mb-6 p-4 border rounded-md">
-                        <h3 className="text-xl font-semibold capitalize mb-2">{disease} Risk</h3>
-                        <div className="flex items-center mb-2">
-                            <div className="w-full bg-gray-200 rounded-full h-4">
-                                <div 
-                                    className={`h-4 rounded-full ${
-                                        data.risk_level === 'high' ? 'bg-red-500' : 
-                                        data.risk_level === 'moderate' ? 'bg-yellow-500' : 'bg-green-500'
-                                    }`} 
-                                    style={{ width: `${data.risk_score}%` }}
-                                ></div>
-                            </div>
-                            <span className="ml-2 font-semibold">{data.risk_score}%</span>
-                        </div>
-                        <p className="mb-3">
-                            Risk Level: <span className={`font-bold ${
-                                data.risk_level === 'high' ? 'text-red-600' : 
-                                data.risk_level === 'moderate' ? 'text-yellow-600' : 'text-green-600'
-                            }`}>{data.risk_level.toUpperCase()}</span>
-                        </p>
-                        <div>
-                            <h4 className="font-semibold mb-2">Recommendations:</h4>
-                            <ul className="list-disc pl-5">
-                                {data.recommendations.map((rec, idx) => (
-                                    <li key={idx} className="mb-1">{rec}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        );
-    };
-
 
     return (
         <div className="health-form-container">
-            <h2 className="text-2xl font-bold mb-6">Health Assessment Form</h2>
+            <h2 className="text-2xl font-bold mb-6">Comprehensive Health Risk Assessment</h2>
 
             {error && (
                 <Alert variant="destructive" className="mb-6">
@@ -265,145 +160,636 @@ const HealthForm = () => {
                     <AlertDescription>{error}</AlertDescription>
                 </Alert>
             )}
+            <div img alt='bg image' className="bg-image">
+            <form onSubmit={handleSubmit} className="health-form">
+                <div className="form-section">
+                    <h3 className="text-xl font-semibold mb-4">Basic Demographics</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="form-group">
+                            <label htmlFor="age">Age (years)*</label>
+                            <input
+                                type="number"
+                                id="age"
+                                name="age"
+                                value={formData.age}
+                                onChange={handleChange}
+                                min="0"
+                                max="120"
+                                required
+                                className="form-input"
+                            />
+                        </div>
 
-            {!results ? (
-                <form onSubmit={handleSubmit} className="health-form">
-                    <div className="form-section">
-                        <h3 className="text-xl font-semibold mb-4">Basic Information</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {renderField('age', 'Age', 'number')}
-                            <div className="form-group">
-                                <label htmlFor="sex">Sex*</label>
-                                <select
-                                    id="sex"
-                                    name="sex"
-                                    value={formData.sex}
-                                    onChange={handleChange}
-                                    required
-                                    className="form-select"
-                                >
-                                    <option value="">Select Sex</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            {renderField('height', 'Height (cm)', 'number')}
-                            {renderField('weight', 'Weight (kg)', 'number')}
-                            {renderField('ethnicity', 'Ethnicity', 'select')}
-                            {renderField('geographicRegion', 'GeographicRegion', 'select')}
+                        <div className="form-group">
+                            <label htmlFor="sex">Sex*</label>
+                            <select
+                                id="sex"
+                                name="sex"
+                                value={formData.sex}
+                                onChange={handleChange}
+                                required
+                                className="form-select"
+                            >
+                                <option value="">Select Sex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="height">Height (cm)*</label>
+                            <input
+                                type="number"
+                                id="height"
+                                name="height"
+                                value={formData.height}
+                                onChange={handleChange}
+                                min="50"
+                                max="250"
+                                required
+                                className="form-input"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="weight">Weight (kg)*</label>
+                            <input
+                                type="number"
+                                id="weight"
+                                name="weight"
+                                value={formData.weight}
+                                onChange={handleChange}
+                                min="20"
+                                max="500"
+                                required
+                                className="form-input"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="ethnicity">Ethnicity*</label>
+                            <select
+                                id="ethnicity"
+                                name="ethnicity"
+                                value={formData.ethnicity}
+                                onChange={handleChange}
+                                required
+                                className="form-select"
+                            >
+                                <option value="">Select Ethnicity</option>
+                                <option value="african_black">African/Black</option>
+                                <option value="asian">Asian</option>
+                                <option value="caucasian_white">Caucasian/White</option>
+                                <option value="hispanic_latino">Hispanic/Latino</option>
+                                <option value="middle_eastern">Middle Eastern</option>
+                                <option value="pacific_islander">Pacific Islander</option>
+                                <option value="indigenous_native">Indigenous/Native</option>
+                                <option value="mixed">Mixed</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="geographicRegion">Geographic Region</label>
+                            <select
+                                id="geographicRegion"
+                                name="geographicRegion"
+                                value={formData.geographicRegion}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="">Select Region</option>
+                                <option value="urban">Urban</option>
+                                <option value="suburban">Suburban</option>
+                                <option value="rural">Rural</option>
+                            </select>
                         </div>
                     </div>
-
-                    <div className="form-section">
-                        <h3 className="text-xl font-semibold mb-4">Lifestyle Factors</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {renderField('physicalActivityLevel', 'PhysicalActivityLevel', 'select')}
-                            {renderField('activityIntensity', 'ActivityIntensity', 'select')}
-                            {renderField('occupationType', 'OccupationType', 'select')}
-                            {renderField('smokingStatus', 'SmokingStatus', 'select')}
-                            {renderField('yearsOfSmoking', 'Years of Smoking', 'number')}
-                            {renderField('averagePacksPerDay', 'Average Packs Per Day', 'number')}
-                            {renderField('alcoholConsumption', 'AlcoholConsumption', 'select')}
-                            {renderField('sleepDuration', 'SleepDuration', 'select')}
-                            {renderField('sleepQuality', 'SleepQuality', 'select')}
-                            {renderField('stressLevels', 'StressLevels', 'select')}
-                        </div>
-                    </div>
-
-                    <div className="form-section">
-                        <h3 className="text-xl font-semibold mb-4">Dietary Habits</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {renderField('waterIntake', 'WaterIntake', 'select')}
-                            {renderField('fruitVegetableConsumption', 'FruitVegetableConsumption', 'select')}
-                            {renderField('processedFoodConsumption', 'ProcessedFoodConsumption', 'select')}
-                            {renderField('sugarIntake', 'SugarIntake', 'select')}
-                            {renderField('saltIntake', 'SaltIntake', 'select')}
-                            {renderField('redMeatConsumption', 'RedMeatConsumption', 'select')}
-                        </div>
-                    </div>
-
-                    <div className="form-section">
-                        <h3 className="text-xl font-semibold mb-4">Medical History</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {renderField('familyHistoryCardiovascular', 'FamilyHistoryCardiovascular', 'select')}
-                            {renderField('diabetesFamilyHistory', 'Do you have family history of diabetes?', 'checkbox')}
-                            {renderField('familyHistoryKidneyStones', 'FamilyHistoryKidneyStones', 'select')}
-                            {renderField('previousKidneyStones', 'PreviousKidneyStones', 'select')}
-                            {renderField('historyGestationalDiabetes', 'HistoryGestationalDiabetes', 'select')}
-                        </div>
-                    </div>
-
-                    <div className="form-section">
-                        <h3 className="text-xl font-semibold mb-4">Symptoms</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {renderField('frequentUrination', 'FrequentUrination', 'select')}
-                            {renderField('unexplainedThirst', 'UnexplainedThirst', 'select')}
-                            {renderField('unexplainedWeightLoss', 'UnexplainedWeightLoss', 'select')}
-                            {renderField('chestPainDiscomfort', 'ChestPainDiscomfort', 'select')}
-                            {renderField('shortnessOfBreath', 'ShortnessOfBreath', 'select')}
-                            {renderField('fatigue', 'Fatigue', 'select')}
-                            {renderField('backFlankPain', 'BackFlankPain', 'select')}
-                            {renderField('painfulUrination', 'PainfulUrination', 'select')}
-                            {renderField('bloodInUrine', 'BloodInUrine', 'select')}
-                        </div>
-                    </div>
-
-                    <div className="form-section">
-                        <h3 className="text-xl font-semibold mb-4">Environmental Factors</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="form-group">
-                                <label htmlFor="environmentalExposure">Environmental Exposure</label>
-                                <select
-                                    id="environmentalExposure"
-                                    name="environmentalExposure"
-                                    value={formData.environmentalExposure}
-                                    onChange={handleChange}
-                                    className="form-select"
-                                >
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                    <option value="unknown">Unknown</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="coughingFrequency">Coughing Frequency</label>
-                                <select
-                                    id="coughingFrequency"
-                                    name="coughingFrequency"
-                                    value={formData.coughingFrequency}
-                                    onChange={handleChange}
-                                    className="form-select"
-                                >
-                                    <option value="rare">Rare</option>
-                                    <option value="occasional">Occasional</option>
-                                    <option value="frequent">Frequent</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className={`submit-button ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        {isSubmitting ? 'Processing...' : 'Assess My Risk'}
-                    </button>
-                </form>
-            ) : renderResults()}
-            
-            {results && (
-                <div className="mt-4">
-                    <button
-                        onClick={() => setResults(null)}
-                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                        Take Another Assessment
-                    </button>
                 </div>
-            )}
+                <div className="form-section">
+                    <h3 className="text-xl font-semibold mb-4">Lifestyle Factors</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="form-group">
+                            <label htmlFor="physicalActivityLevel">Physical Activity Level</label>
+                            <select
+                                id="physicalActivityLevel"
+                                name="physicalActivityLevel"
+                                value={formData.physicalActivityLevel}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="none">None (0 days/week)</option>
+                                <option value="low">Low (1-2 days/week)</option>
+                                <option value="moderate">Moderate (3-4 days/week)</option>
+                                <option value="high">High (5+ days/week)</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="activityIntensity">Activity Intensity</label>
+                            <select
+                                id="activityIntensity"
+                                name="activityIntensity"
+                                value={formData.activityIntensity}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="light">Light (walking, gentle yoga)</option>
+                                <option value="moderate">Moderate (brisk walking, cycling)</option>
+                                <option value="vigorous">Vigorous (running, HIIT workouts)</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="occupationType">Occupation Type</label>
+                            <select
+                                id="occupationType"
+                                name="occupationType"
+                                value={formData.occupationType}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="sedentary">Sedentary (desk job)</option>
+                                <option value="moderately_active">Moderately active</option>
+                                <option value="physically_demanding">Physically demanding</option>
+                                <option value="retired">Retired</option>
+                                <option value="student">Student</option>
+                                <option value="unemployed">Unemployed</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="smokingStatus">Smoking Status</label>
+                            <select
+                                id="smokingStatus"
+                                name="smokingStatus"
+                                value={formData.smokingStatus}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="never">Never smoked</option>
+                                <option value="former_over_year">Former smoker (quit {'>'} 1 year ago)</option>
+                                <option value="former_under_year">Former smoker (quit {'<'}1 year ago)</option>
+                                <option value="current_occasional">Current smoker (occasional)</option>
+                                <option value="current_daily">Current smoker (daily)</option>
+                            </select>
+                        </div>
+
+                        {showSmokingFields && (
+                            <>
+                                <div className="form-group">
+                                    <label htmlFor="yearsOfSmoking">Years of Smoking</label>
+                                    <input
+                                        type="number"
+                                        id="yearsOfSmoking"
+                                        name="yearsOfSmoking"
+                                        value={formData.yearsOfSmoking}
+                                        onChange={handleChange}
+                                        min="0"
+                                        max="100"
+                                        className="form-input"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="packsPerDay">Average Packs Per Day</label>
+                                    <select
+                                        id="packsPerDay"
+                                        name="packsPerDay"
+                                        value={formData.packsPerDay}
+                                        onChange={handleChange}
+                                        className="form-select"
+                                    >
+                                        <option value="">Select Amount</option>
+                                        <option value="0.25">0.25 (few cigarettes)</option>
+                                        <option value="0.5">0.5 (half pack)</option>
+                                        <option value="1">1 (one pack)</option>
+                                        <option value="1.5">1.5 (one and a half packs)</option>
+                                        <option value="2+">2+ (two or more packs)</option>
+                                    </select>
+                                </div>
+                            </>
+                        )}
+
+                        <div className="form-group">
+                            <label htmlFor="alcoholConsumption">Alcohol Consumption</label>
+                            <select
+                                id="alcoholConsumption"
+                                name="alcoholConsumption"
+                                value={formData.alcoholConsumption}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="none">None</option>
+                                <option value="occasional">Occasional (few times per month)</option>
+                                <option value="moderate">Moderate (1-2 drinks, few times per week)</option>
+                                <option value="heavy">Heavy (daily or multiple drinks most days)</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="sleepDuration">Sleep Duration</label>
+                            <select
+                                id="sleepDuration"
+                                name="sleepDuration"
+                                value={formData.sleepDuration}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="<5">Less than 5 hours</option>
+                                <option value="5-6">5-6 hours</option>
+                                <option value="7-8">7-8 hours</option>
+                                <option value="9+">9+ hours</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="sleepQuality">Sleep Quality</label>
+                            <select
+                                id="sleepQuality"
+                                name="sleepQuality"
+                                value={formData.sleepQuality}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="poor">Poor</option>
+                                <option value="fair">Fair</option>
+                                <option value="good">Good</option>
+                                <option value="excellent">Excellent</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="stressLevels">Stress Levels</label>
+                            <select
+                                id="stressLevels"
+                                name="stressLevels"
+                                value={formData.stressLevels}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="low">Low</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="high">High</option>
+                                <option value="severe">Severe</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div className="form-section">
+                    <h3 className="text-xl font-semibold mb-4">Diet and Nutrition</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="form-group">
+                            <label htmlFor="waterIntake">Daily Water Intake</label>
+                            <select
+                                id="waterIntake"
+                                name="waterIntake"
+                                value={formData.waterIntake}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="<4">Less than 4 glasses</option>
+                                <option value="4-6">4-6 glasses</option>
+                                <option value="7-8">7-8 glasses</option>
+                                <option value="9+">9+ glasses</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="fruitVegetableConsumption">Fruit and Vegetable Consumption</label>
+                            <select
+                                id="fruitVegetableConsumption"
+                                name="fruitVegetableConsumption"
+                                value={formData.fruitVegetableConsumption}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="<1">Less than 1 serving/day</option>
+                                <option value="1-2">1-2 servings/day</option>
+                                <option value="3-4">3-4 servings/day</option>
+                                <option value="5+">5+ servings/day</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="processedFoodConsumption">Processed Food Consumption</label>
+                            <select
+                                id="processedFoodConsumption"
+                                name="processedFoodConsumption"
+                                value={formData.processedFoodConsumption}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="rarely">Rarely (few times/month)</option>
+                                <option value="sometimes">Sometimes (few times/week)</option>
+                                <option value="often">Often (almost daily)</option>
+                                <option value="very_often">Very often (multiple times daily)</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="addedSugarIntake">Added Sugar Intake</label>
+                            <select
+                                id="addedSugarIntake"
+                                name="addedSugarIntake"
+                                value={formData.addedSugarIntake}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="low">Low (avoid sugary foods/drinks)</option>
+                                <option value="moderate">Moderate (occasional sweets/sodas)</option>
+                                <option value="high">High (daily consumption of sugary items)</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="saltIntake">Salt Intake</label>
+                            <select
+                                id="saltIntake"
+                                name="saltIntake"
+                                value={formData.saltIntake}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="low">Low (minimal added salt)</option>
+                                <option value="moderate">Moderate (some added salt)</option>
+                                <option value="high">High (frequently add salt/consume salty foods)</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="redMeatConsumption">Red Meat Consumption</label>
+                            <select
+                                id="redMeatConsumption"
+                                name="redMeatConsumption"
+                                value={formData.redMeatConsumption}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="none">None (vegetarian/vegan)</option>
+                                <option value="low">Low (few times/month)</option>
+                                <option value="moderate">Moderate (1-2 times/week)</option>
+                                <option value="high">High (3+ times/week)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div className="form-section">
+                    <h3 className="text-xl font-semibold mb-4">Medical History</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="form-group">
+                            <label htmlFor="familyHistoryCardiovascular">Family History of Cardiovascular Disease</label>
+                            <select
+                                id="familyHistoryCardiovascular"
+                                name="familyHistoryCardiovascular"
+                                value={formData.familyHistoryCardiovascular}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="no">No</option>
+                                <option value="extended">Yes, extended family (grandparents, aunts/uncles)</option>
+                                <option value="immediate">Yes, immediate family (parents, siblings)</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="familyHistoryDiabetes">Family History of Diabetes</label>
+                            <select
+                                id="familyHistoryDiabetes"
+                                name="familyHistoryDiabetes"
+                                value={formData.familyHistoryDiabetes}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="no">No</option>
+                                <option value="extended">Yes, extended family</option>
+                                <option value="immediate">Yes, immediate family</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="familyHistoryKidneyStones">Family History of Kidney Stones</label>
+                            <select
+                                id="familyHistoryKidneyStones"
+                                name="familyHistoryKidneyStones"
+                                value={formData.familyHistoryKidneyStones}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="no">No</option>
+                                <option value="extended">Yes, extended family</option>
+                                <option value="immediate">Yes, immediate family</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="previousKidneyStones">Previous Kidney Stones</label>
+                            <select
+                                id="previousKidneyStones"
+                                name="previousKidneyStones"
+                                value={formData.previousKidneyStones}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="no">No</option>
+                                <option value="one">Yes, one occurrence</option>
+                                <option value="multiple">Yes, multiple occurrences</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="gestationalDiabetes">For Women - History of Gestational Diabetes</label>
+                            <select
+                                id="gestationalDiabetes"
+                                name="gestationalDiabetes"
+                                value={formData.gestationalDiabetes}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="not_applicable">Not applicable</option>
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div className="form-section">
+                    <h3 className="text-xl font-semibold mb-4">Symptoms</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="form-group">
+                            <label htmlFor="frequentUrination">Frequent Urination</label>
+                            <select
+                                id="frequentUrination"
+                                name="frequentUrination"
+                                value={formData.frequentUrination}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="no">No</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                                <option value="very_frequently">Very frequently</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="unexplainedThirst">Unexplained Thirst</label>
+                            <select
+                                id="unexplainedThirst"
+                                name="unexplainedThirst"
+                                value={formData.unexplainedThirst}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="no">No</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                                <option value="very_frequently">Very frequently</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="unexplainedWeightLoss">Unexplained Weight Loss</label>
+                            <select
+                                id="unexplainedWeightLoss"
+                                name="unexplainedWeightLoss"
+                                value={formData.unexplainedWeightLoss}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="no">No</option>
+                                <option value="slight">Yes (slight)</option>
+                                <option value="significant">Yes (significant)</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="chestPain">Chest Pain or Discomfort</label>
+                            <select
+                                id="chestPain"
+                                name="chestPain"
+                                value={formData.chestPain}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="never">Never</option>
+                                <option value="rarely">Rarely</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="shortnessOfBreath">Shortness of Breath During Normal Activities</label>
+                            <select
+                                id="shortnessOfBreath"
+                                name="shortnessOfBreath"
+                                value={formData.shortnessOfBreath}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="never">Never</option>
+                                <option value="rarely">Rarely</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="fatigue">Fatigue</label>
+                            <select
+                                id="fatigue"
+                                name="fatigue"
+                                value={formData.fatigue}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="never">Never</option>
+                                <option value="rarely">Rarely</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="backFlankPain">Back or Flank Pain</label>
+                            <select
+                                id="backFlankPain"
+                                name="backFlankPain"
+                                value={formData.backFlankPain}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="never">Never</option>
+                                <option value="rarely">Rarely</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="painfulUrination">Painful Urination</label>
+                            <select
+                                id="painfulUrination"
+                                name="painfulUrination"
+                                value={formData.painfulUrination}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="never">Never</option>
+                                <option value="rarely">Rarely</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="bloodInUrine">Blood in Urine</label>
+                            <select
+                                id="bloodInUrine"
+                                name="bloodInUrine"
+                                value={formData.bloodInUrine}
+                                onChange={handleChange}
+                                className="form-select"
+                            >
+                                <option value="never">Never</option>
+                                <option value="rarely">Rarely</option>
+                                <option value="occasionally">Occasionally</option>
+                                <option value="frequently">Frequently</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="environmentalExposure">Environmental Exposure to Pollutants</label>
+                        <select
+                            id="environmentalExposure"
+                            name="environmentalExposure"
+                            value={formData.environmentalExposure}
+                            onChange={handleChange}
+                            className="form-select"
+                        >
+                            <option value="low">Low</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="high">High</option>
+                            <option value="unknown">Unknown</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`submit-button ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                    {isSubmitting ? 'Submitting...' : 'Submit Assessment'}
+                </button>
+            </form>
+            </div>
         </div>
     );
 };
