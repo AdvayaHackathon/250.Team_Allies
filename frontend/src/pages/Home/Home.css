@@ -45,14 +45,11 @@
     z-index: 1;
     object-fit: contain;
     display: none;
-    /* Hidden by default */
 }
 
-/* Show only on desktop */
 @media (min-width: 992px) {
     .doctor-image {
         display: block;
-        /* Show on desktop */
     }
 }
 .cta-buttons {
