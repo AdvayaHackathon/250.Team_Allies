@@ -77,28 +77,24 @@ const Home = () => {
                             <HeartIcon />
                         </div>
                         <h3>Comprehensive Health Assessment</h3>
-                        <p>Get detailed insights about various health risk factors affecting your well-being with our thorough evaluation process.</p>
+                        <p>Get detailed insights about various health risk factors affecting your well-being with our thorough evaluation process.Supports the creation of personalized care plans aimed at improving long-term health.</p>
                     </div>
                     <div className="service-card">
                         <div className="service-icon">
                             <ShieldIcon />
                         </div>
                         <h3>Personalized Care Plans</h3>
-                        <p>Receive evidence-based health recommendations tailored specifically to your assessment results and health history.</p>
+                        <p>Receive evidence-based health recommendations tailored specifically to your assessment results and health history.The goal is to offer customized health guidance that aligns with each user's individual needs,health goals and and risk factors.
+                        </p>
                     </div>
                     <div className="service-card">
                         <div className="service-icon">
                             <ChartIcon />
                         </div>
                         <h3>Health Monitoring & Progress</h3>
-                        <p>Track your health metrics over time with our advanced monitoring tools and celebrate your improvement journey.</p>
-                    </div>
-                    <div className="service-card">
-                        <div className="service-icon">
-                            <UserIcon />
-                        </div>
-                        <h3>Secure Patient Portal</h3>
-                        <p>Access your health information anytime with our HIPAA-compliant secure portal that protects your privacy.</p>
+                        <p>Track your health metrics over time with our advanced monitoring tools and serves as a foundation for risk identification and supports the creation of targeted, personalized care plans aimed at improving long-term health and well-being.
+                        
+                        </p>
                     </div>
                 </div>
             </section>
