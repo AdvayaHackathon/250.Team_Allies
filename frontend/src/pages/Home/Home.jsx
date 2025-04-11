@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
 // Icons for services
@@ -28,35 +28,14 @@ const UserIcon = () => (
 );
 
 const Home = () => {
-    const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-
-    const handleAssessmentClick = () => {
-        if (token) {
-            navigate('/health-form');
-        } else {
-            navigate('/login');
-        }
-    };
-
-    const handleSpecialistsClick = () => {
-        navigate('/specialists');
-    };
-
+  //  const navigate = useNavigate();
+   // const token = localStorage.getItem('token');
     return (
         <div className="home">
             <section className="hero">
                 <div className="hero-content">
                     <h1>A family of healthcare professionals for your family</h1>
                     <p>We put patients at the center with personalized care plans and collaborative clinical teams working to improve health outcomes and reduce costs.</p>
-                    <div className="cta-buttons">
-                        <button className="primary-button" onClick={handleAssessmentClick}>
-                            {token ? 'Get Assessment' : 'Schedule Appointment'}
-                        </button>
-                        <button className="secondary-button" onClick={handleSpecialistsClick}>
-                            Find Specialists
-                        </button>
-                    </div>
                 </div>
                 <div className="decorative-dots"></div>
                 <img

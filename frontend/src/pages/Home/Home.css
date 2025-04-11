@@ -138,7 +138,7 @@
 
 .service-card:hover {
     transform: translateY(-10px);
-    border-bottom: 4px solid #3563e9;
+    border-bottom: 8px solid #4064d3;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
