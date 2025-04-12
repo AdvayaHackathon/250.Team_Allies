@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-//user data model
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -14,10 +14,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    authToken: {
+    authToken: { 
         type: String
     }
-
+  
 });
 
 const User = mongoose.model('User', userSchema);

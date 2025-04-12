@@ -18,46 +18,60 @@ const Dashboard = () => {
             const response = await api.getUserHealthRecords();
             console.log("API Response:", response);
 
-            const records = Array.isArray(response.records)
-                ? response.records
-                : [{ riskAssessment: response.riskAssessment }];
+            const records = Array.isArray(response.records) ? response.records : [];
 
-            const processedRecords = records.map(record => ({
-                ...record,
-                riskAssessment: {
-                    bloodPressure: {
-                        riskScore: record.riskAssessment?.bloodPressure?.riskScore ?? "N/A",
-                        probability: record.riskAssessment?.bloodPressure?.probability ?? "N/A"
-                    },
-                    diabetes: {
-                        riskScore: record.riskAssessment?.diabetes?.riskScore ?? "N/A",
-                        probability: record.riskAssessment?.diabetes?.probability ?? "N/A"
-                    },
-                    heartDisease: {
-                        riskScore: record.riskAssessment?.heartDisease?.riskScore ?? "N/A",
-                        probability: record.riskAssessment?.heartDisease?.probability ?? "N/A"
-                    },
-                    respiratory: {
-                        riskScore: record.riskAssessment?.respiratory?.riskScore ?? "N/A",
-                        probability: record.riskAssessment?.respiratory?.probability ?? "N/A"
+            const processedRecords = records.map(record => {
+                const riskAssessment = record.riskAssessment || {};
+
+                return {
+                    ...record,
+                    results: {
+                        cardiovascular: {
+                            risk_score: riskAssessment?.cardiovascular?.risk_score ?? "N/A",
+                            risk_level: riskAssessment?.cardiovascular?.risk_level ?? "N/A",
+                            recommendations: riskAssessment?.cardiovascular?.recommendations || []
+                        },
+                        diabetes: {
+                            risk_score: riskAssessment?.diabetes?.risk_score ?? "N/A",
+                            risk_level: riskAssessment?.diabetes?.risk_level ?? "N/A",
+                            recommendations: riskAssessment?.diabetes?.recommendations || []
+                        },
+                        kidney_stone: {
+                            risk_score: riskAssessment?.kidney_stone?.risk_score ?? "N/A",
+                            risk_level: riskAssessment?.kidney_stone?.risk_level ?? "N/A",
+                            recommendations: riskAssessment?.kidney_stone?.recommendations || []
+                        }
                     }
-                }
-            }));
+                };
+            });
 
-            console.log("Processed Health Records:", processedRecords);
             setHealthRecords(processedRecords);
         } catch (err) {
-            console.error("Error fetching data:", err);
-            setError("Error fetching data.");
+            console.error("Error fetching health records:", err);
+            setError("Failed to fetch health records.");
         } finally {
             setLoading(false);
         }
     };
 
+    const handleNewAssessment = () => {
+        navigate('/health-form');
+    };
 
     const formatRiskScore = (score) => {
+        if (score === "N/A") return "N/A";
         const numScore = Number(score);
-        return !isNaN(numScore) && numScore !== 0 ? Math.round(numScore) : "N/A";
+        return !isNaN(numScore) ? `${numScore.toFixed(1)}%` : "N/A";
+    };
+
+    const getRiskLevelClass = (level) => {
+        if (!level || level === "N/A") return "risk-unknown";
+        switch (level.toLowerCase()) {
+            case 'low': return "risk-low";
+            case 'medium': return "risk-medium";
+            case 'high': return "risk-high";
+            default: return "risk-unknown";
+        }
     };
 
     if (loading) return <div className="loading">Loading...</div>;
@@ -65,34 +79,34 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <h2>Your Health Records</h2>
-            <div className="records-grid">
-                {healthRecords.length > 0 ? (
-                    healthRecords.map((record, index) => (
-                        <div key={index} className="record-card">
-                            <h3>Record {index + 1}</h3>
-                            <div className="risk-scores">
-                                {Object.entries(record.riskAssessment).map(([key, assessment]) => (
-                                    <div key={key} className="risk-item">
-                                        <span className="risk-label">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                                        <span className="risk-value">{formatRiskScore(assessment?.riskScore)}</span>
-                                    </div>
-                                ))}
+            <h2>Health Risk Assessments</h2>
+            <button onClick={handleNewAssessment}>New Assessment</button>
+
+            {healthRecords.length === 0 ? (
+                <p>No records found. Please complete a health assessment.</p>
+            ) : (
+                healthRecords.map((record, index) => (
+                    <div key={index} className="record-card">
+                        <h3>{record.createdAt ? new Date(record.createdAt).toLocaleString() : "Unknown Date"}</h3>
+
+                        {["cardiovascular", "diabetes", "kidney_stone"].map((category) => (
+                            <div key={category} className="record-section">
+                                <h4>{category.replace("_", " ").toUpperCase()}</h4>
+                                <p>Risk Score: {formatRiskScore(record.results?.[category]?.risk_score)}</p>
+                                <p className={getRiskLevelClass(record.results?.[category]?.risk_level)}>
+                                    Risk Level: {record.results?.[category]?.risk_level || "N/A"}
+                                </p>
+                                <p>Recommendations:</p>
+                                <ul>
+                                    {(record.results?.[category]?.recommendations || []).map((rec, idx) => (
+                                        <li key={idx}>{rec}</li>
+                                    ))}
+                                </ul>
                             </div>
-                            <button
-                                className="view-details-btn"
-                                onClick={() => navigate('/risk-assessment', {
-                                    state: { assessmentData: { riskAssessment: record.riskAssessment } }
-                                })}
-                            >
-                                View Details
-                            </button>
-                        </div>
-                    ))
-                ) : (
-                    <p>No health records available.</p>
-                )}
-            </div>
+                        ))}
+                    </div>
+                ))
+            )}
         </div>
     );
 };
