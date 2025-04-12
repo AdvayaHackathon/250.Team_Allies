@@ -34,7 +34,7 @@ const Login = () => {
                     sessionStorage.setItem('token', response.token);
                 }
                 toast.success('Login successful!');
-                navigate('/dashboard');
+                navigate('/health-form');
             } else {
                 toast.error('Invalid credentials. Please try again.');
             }
