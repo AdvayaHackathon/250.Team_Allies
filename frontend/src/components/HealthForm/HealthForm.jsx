@@ -52,7 +52,6 @@ const HealthForm = () => {
         backFlankPain: 'never',
         painfulUrination: 'never',
         bloodInUrine: 'never',
-
         // Environmental Factors
         environmentalExposure: 'low'
     });
@@ -63,7 +62,6 @@ const HealthForm = () => {
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
-
         setFormData(prev => ({
             ...prev,
             [name]: newValue
@@ -200,7 +198,7 @@ const HealthForm = () => {
                     <AlertDescription>{error}</AlertDescription>
                 </Alert>
             )}
-
+            <div img alt='bg image' className="bg-image">
             <form onSubmit={handleSubmit} className="health-form">
                 {/* Basic Demographics Section */}
                 <div className="form-section">
@@ -838,6 +836,7 @@ const HealthForm = () => {
                     {isSubmitting ? 'Submitting...' : 'Submit Assessment'}
                 </button>
             </form>
+            </div>
         </div>
     );
 };

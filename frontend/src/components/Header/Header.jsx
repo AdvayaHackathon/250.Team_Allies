@@ -21,10 +21,10 @@ const Header = () => {
     return (
         <header className="header">
             <div className="header-content">
-                <Link to="/" className="logo-container">
+                <div className="logo-container">
                     <div className="logo-circle"></div>
                     <span className="logo">Health Risk Assessment</span>
-                </Link>
+                </div>
                 <nav className="nav-links">
                     <Link to="/" className={isActive('/') ? 'active' : ''}>
                         Home

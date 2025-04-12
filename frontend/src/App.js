@@ -13,6 +13,9 @@ import HealthForm from './components/HealthForm/HealthForm';
 import RiskAssessment from './components/RiskAssessment/RiskAssessment';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
+import TermsAndServices from './pages/terms/terms';
+import PrivacyPolicy from './pages/Privacy/privacy';
+import ContactUs from './pages/contact/contact';
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
           <Header />
           <main className="main-content">
             <Routes>
+            <Route path="/terms" element={<TermsAndServices />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/contact" element={<ContactUs />} />
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
