@@ -13,21 +13,18 @@ const app = express();
 const port = process.env.PORT || 5000;
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5000';
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("Connected to MongoDB"))
     .catch((error) => console.error("Error connecting to MongoDB:", error));
 
-// API routes
+
 app.use('/health', healthRoutes);
 app.use('/users', userRoutes);
 
-// Direct ML model access endpoints - these are the main ones that will be used
 app.post('/assess_risk', async (req, res) => {
     try {
         const response = await axios.post(`${ML_SERVICE_URL}/assess_risk`, req.body);
@@ -53,7 +50,6 @@ app.get('/get_required_fields', async (req, res) => {
 });
 
 
-// Start server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

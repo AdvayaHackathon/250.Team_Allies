@@ -1,4 +1,4 @@
-# Import necessary libraries
+
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer

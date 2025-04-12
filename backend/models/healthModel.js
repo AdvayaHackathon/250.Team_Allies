@@ -22,7 +22,6 @@ const healthDataSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    // Basic Demographics
     age: {
         type: Number,
         required: true,

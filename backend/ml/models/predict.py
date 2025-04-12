@@ -23,7 +23,6 @@ FEATURES = {
     "kidney_stone": KIDNEY_STONE_FEATURES
 }
 
-# Global models dictionary
 models = {}
 
 def calculate_bmi(height, weight):
@@ -67,9 +66,9 @@ def create_mock_model():
 
 def get_risk_level(score):
     """Convert numeric score to risk level"""
-    if score < 0.3:
+    if score < 0.4:
         return "low"
-    elif score < 0.6:
+    elif score < 0.75:
         return "medium"
     else:
         return "high"
@@ -97,57 +96,42 @@ def get_recommendations(disease, risk_level):
 
 def prepare_input_data(user_data, disease):
     """Prepare input data ensuring all features are present and correctly typed"""
-    # Get the feature list for this disease
     features = FEATURES[disease]
     
-    # Create a DataFrame with a single row
     input_df = pd.DataFrame(index=[0])
     
-    # Apply feature mappings for categorical features first
     for feature in features:
-        # Check if feature needs mapping
         if feature in FEATURE_MAPPINGS and feature in user_data:
             value = user_data[feature]
-            # Convert string value to numeric using mapping
             if isinstance(value, str) and value in FEATURE_MAPPINGS[feature]:
                 input_df[feature] = FEATURE_MAPPINGS[feature][value]
             else:
-                # Try to use the value directly if it's numeric
                 try:
                     numeric_val = float(value)
-                    # Validate if this is a valid value for mapping (positive integer)
                     if numeric_val >= 0 and numeric_val.is_integer():
                         input_df[feature] = numeric_val
                     else:
                         input_df[feature] = 0
                 except (ValueError, TypeError):
                     input_df[feature] = 0
-        # Handle non-categorical features
         elif feature in user_data:
             try:
                 input_df[feature] = float(user_data[feature])
             except (ValueError, TypeError):
                 input_df[feature] = 0
         else:
-            # Feature not provided
             input_df[feature] = 0
-    
-    # Special handling for BMI calculation if needed
     if "BMI" in features and "BMI" not in user_data and "Height" in user_data and "Weight" in user_data:
         input_df["BMI"] = calculate_bmi(user_data["Height"], user_data["Weight"])
-    
-    # Ensure all features from the model are present
     for feature in features:
         if feature not in input_df.columns:
             input_df[feature] = 0
-    
-    # Ensure only required features are included and in the correct order
-    return input_df[features]  # Return DataFrame instead of numpy array
+ 
+    return input_df[features] 
 
 
 def predict_risk_direct(user_data):
     """Get predictions for all disease models"""
-    # Ensure models are loaded
     if not models:
         load_models()
     
@@ -155,23 +139,25 @@ def predict_risk_direct(user_data):
 
     for disease in ['diabetes', 'cardiovascular', 'kidney_stone']:
         try:
-            # Prepare input data - keep as DataFrame
             X = prepare_input_data(user_data, disease)
             
-            # Make prediction
+            # Debug logging - print input features
+            logger.info(f"Input data for {disease} prediction:")
+            logger.info(X)
+   
             if disease in models and models[disease] is not None:
-                # Get prediction probability of positive class
                 prediction_prob = models[disease].predict_proba(X)[0][1]
+                
+                # Debug logging - print raw probability
+                logger.info(f"Raw probability for {disease}: {prediction_prob}")
+                
                 prediction = prediction_prob * 100
             else:
-                # Use deterministic fallback if model not available
-                prediction = 50.0  # Middle value
+                prediction = 50.0 
             
-            # Get risk level and recommendations
             risk_level = get_risk_level(prediction/100)
             recommendations_list = get_recommendations(disease, risk_level)
-            
-            # Store results
+        
             results[disease] = {
                 "risk_score": round(prediction, 1),
                 "risk_level": risk_level,
@@ -182,7 +168,6 @@ def predict_risk_direct(user_data):
 
         except Exception as e:
             logger.error(f"Error in prediction for {disease}: {str(e)}")
-            # Provide deterministic fallback
             results[disease] = {
                 "risk_score": 50.0,
                 "risk_level": "medium",

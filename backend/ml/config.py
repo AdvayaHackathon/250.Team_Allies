@@ -1,4 +1,3 @@
-# Feature lists for each model - these must match exactly between training and prediction
 DIABETES_FEATURES = [
     "Age", "Sex", "Height", "Weight", "BMI", "Physical activity level", 
     "Smoking status", "Alcohol consumption", "Sleep duration", 
@@ -22,7 +21,7 @@ KIDNEY_STONE_FEATURES = [
     "Painful urination", "Blood in urine"
 ]
 
-# Feature mappings for categorical data with default values
+
 FEATURE_MAPPINGS = {
     "Sex": {"Male": 0, "Female": 1, "Other": 2, "default": 0},
     "Physical activity level": {
@@ -198,34 +197,29 @@ FEATURE_MAPPINGS = {
     }
 }
 
-# Define reasonable default values for numeric features
+
 NUMERIC_DEFAULTS = {
     "Age": 35,
     "Height": 170,
     "Weight": 70,
     "BMI": 24.5,
-    # Add any other numeric features that need defaults
 }
 
-# Define expected value ranges for validation
 VALUE_RANGES = {
     "Age": (0, 120),
-    "Height": (50, 250),  # cm
-    "Weight": (20, 300),  # kg
+    "Height": (50, 250),  
+    "Weight": (20, 300),  
     "BMI": (10, 60),
-    "Sleep duration": (0, 24)  # hours
+    "Sleep duration": (0, 24)  
 }
 
-# Define boolean features (0/1 only)
 BOOLEAN_FEATURES = [
     "Blood in urine"
 ]
 
-# Define data paths
 DATASET_PATH = 'data/risk_assessment_sample_dataset.csv'
 MODELS_DIR = 'models/saved/'
 
-# Utility functions for config
 def get_default_mapping(feature):
     """Get default numeric value for a categorical feature"""
     if feature in FEATURE_MAPPINGS:
