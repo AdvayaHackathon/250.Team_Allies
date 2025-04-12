@@ -1,0 +1,32 @@
+/* Pages.css */
+
+.privacy {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .privacy h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .privacy h2 {
+    font-size: 1.8em;
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .privacy p {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #666;
+    margin-bottom: 15px;
+  }
