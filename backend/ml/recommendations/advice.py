@@ -1,4 +1,4 @@
-# Recommendations based on risk levels
+
 recommendations = {
     'diabetes': {
         'high': [

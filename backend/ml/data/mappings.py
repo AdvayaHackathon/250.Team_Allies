@@ -1,7 +1,6 @@
-# Define mappings between API numerical inputs and model string inputs
+
 
 FEATURE_MAPPINGS = {
-    # General mappings
     "Sex": {
         0: "Female",
         1: "Male",
