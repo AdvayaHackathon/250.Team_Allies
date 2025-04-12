@@ -13,7 +13,6 @@ const Header = () => {
         navigate('/login');
     };
 
-    // Function to check if link is active
     const isActive = (path) => {
         return location.pathname === path;
     };
@@ -31,9 +30,6 @@ const Header = () => {
                     </Link>
                     {token ? (
                         <>
-                            <Link to="/dashboard" className={isActive('/dashboard') ? 'active' : ''}>
-                                Dashboard
-                            </Link>
                             <Link to="/health-form" className={isActive('/health-form') ? 'active' : ''}>
                                 New Assessment
                             </Link>
